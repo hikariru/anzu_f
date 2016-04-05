@@ -1,0 +1,22 @@
+{
+  "name": "anzu_f",
+  "version": "1.0.0",
+  "description": "働いたら負け",
+  "main": "anzu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hikariru/anzu_f.git"
+  },
+  "author": "hikaruu",
+  "dependencies": {
+    "botkit": "https://github.com/howdyai/botkit.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hikariru/anzu_f/issues"
+  },
+  "homepage": "https://github.com/hikariru/anzu_f"
+}
