@@ -4,6 +4,7 @@
   "description": "働いたら負け",
   "main": "anzu.js",
   "scripts": {
+    "start": "node anzu.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
