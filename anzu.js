@@ -18,7 +18,7 @@ var bot = controller.spawn({
 
 
 controller.hears(['ぬるぽ', 'ヌルポ'], 'ambient', function(bot, message) {
-  bot.reply('message', 'ガッ！ …ところで、これってどういう意味？');
+  bot.reply(message, 'ガッ！ …ところで、これってどういう意味？');
 });
 
 controller.hears(['進捗どうですか'], 'ambient', function(bot, message) {
@@ -29,7 +29,7 @@ controller.hears(['進捗どうですか'], 'ambient', function(bot, message) {
       bot.botkit.log('Failed to load user info :(', err);
     } else {
       var userName = res.user.name;
-      bot.reply('message', '逆にさぁー、 @' + userName + 'さんは進捗どう思うー？');
+      bot.reply(message, '逆にさぁー、 @' + userName + 'さんは進捗どうだと思うわけー？');
     }
   });
 });
@@ -39,8 +39,21 @@ controller.hears(['かわいい'], 'direct_message,direct_mention,mention', func
   bot.reply(message, messages[Math.random() * messages.length | 0]);
 });
 
-controller.hears(['杏ちゃん', 'あんずちゃん'], 'ambient', function(bot, message) {
+controller.hears(['飴あげる'], 'direct_message,direct_mention,mention', function(bot, message) {
+  bot.api.reactions.add({
+    timestamp: message.ts,
+    channel: message.channel,
+    name: 'two_hearts'
+  }, function(err, res) {
+    if (err) {
+      bot.botkit.log('Failed to add emoji reaction :(',err);
+    }
+  });
 
+  bot.reply(message, 'おいしーっ！ありがとー！');
+});
+
+controller.hears(['飴ちょうだい'], 'direct_message,direct_mention,mention', function(bot, message) {
   bot.api.reactions.add({
     timestamp: message.ts,
     channel: message.channel,
@@ -51,6 +64,11 @@ controller.hears(['杏ちゃん', 'あんずちゃん'], 'ambient', function(bot
     }
   });
 
+  bot.reply(message, 'しかたないなぁ〜');
+});
+
+controller.hears(['杏ちゃん', 'あんずちゃん'], 'ambient', function(bot, message) {
+
   bot.api.users.info({
     user: message.user
   }, function(err, res) {
@@ -60,17 +78,28 @@ controller.hears(['杏ちゃん', 'あんずちゃん'], 'ambient', function(bot
       bot.startConversation(message,function(err, convo) {
           convo.ask('@'+ res.user.name + ': なーに？飴くれるのー？',[
               {
-                  pattern: ['はい', 'あげる'],
+                  pattern: new RegExp(/^(はい|どうぞ|あげる)/i),
                   callback: function(response, convo) {
-                      convo.say('ほんと？！ありがとー<3');
+                      bot.api.reactions.add({
+                        timestamp: response.ts,
+                        channel: response.channel,
+                        name: 'two_hearts'
+                      });
+                      convo.say('ほんと？！ありがとー');
                       convo.next();
                   }
               },
               {
-                  pattern: ['いいえ', 'あげない'],
-                  default: true,
+                  pattern: new RegExp(/^(いいえ|やだ|あげない)/i),
                   callback: function(response, convo) {
                       convo.say('えー、けち…(ふて寝しよっと)');
+                      convo.next();
+                  }
+              },
+              {
+                  default: true,
+                  callback: function(response, convo) {
+                      convo.say('用事がないなら呼ばないでよね〜 おやすみっ :zzz:');
                       convo.next();
                   }
               }
