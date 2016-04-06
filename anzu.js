@@ -5,6 +5,7 @@ if (!process.env.token) {
 
 var Botkit = require('./node_modules/botkit/lib/Botkit.js');
 var os = require('os');
+var http = require('http');
 
 var controller = Botkit.slackbot({
     debug: false
